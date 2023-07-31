@@ -14,7 +14,7 @@ env.config()
 
 app.use(bodyParser.json());
 app.use('/api',authRoutes);
-app.use('/api',adminRoutes);
+app.use('/api',adminRoutes)
 
 //mongodb connection
 mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.qkkqehk.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`)
