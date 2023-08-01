@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const authRoutes=require('./routes/auth')
 const adminRoutes=require('./routes/admin/auth')
 const categoryRoutes = require("./routes/category");
+const productRoutes = require("./routes/product");
 
 
 //environment variable
@@ -17,7 +18,7 @@ app.use(express.json());
 app.use('/api',authRoutes);
 app.use('/api',adminRoutes)
 app.use("/api",categoryRoutes);
-
+app.use("/api", productRoutes);
 
 //mongodb connection
 mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.qkkqehk.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`)
