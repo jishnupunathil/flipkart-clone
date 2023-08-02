@@ -8,43 +8,25 @@ exports.addtocart = (req, res) => {
           if (cartExist) {
             const product = req.body.cartItems.product;
             const item = cartExist.cartItems.find((c) => c.product == product);
-  
+            let condition,update
             if (item) {
               // Update the quantity of the existing item
-              Cart.findOneAndUpdate(
-                {
-                  user: req.user._id,
-                  "cartItems.product": product,
-                },
-                {
-                  $set: {
-                    "cartItems.$.quantity": item.quantity + req.body.cartItems.quantity,
-                  },
-                }
-              )
-                .then((cart) => {
-                  res.status(200).json({ success: 'updated product quantity', cart });
-                })
-                .catch((err) => {
-                  res.status(400).json({ err });
-                });
+              condition={user: req.user._id,"cartItems.product": product}
+              update={$set: {"cartItems.$.quantity": item.quantity + req.body.cartItems.quantity}}
+             
             } else {
               // Add the new item to the cart
-              Cart.findOneAndUpdate(
-                { user: req.user._id },
-                {
-                  $push: {
-                    cartItems: req.body.cartItems,
-                  },
-                }
-              )
+              condition={user: req.user._id}
+              update={$push: {cartItems: req.body.cartItems}}
+              
+            }
+            Cart.findOneAndUpdate(condition,update)
                 .then((cart) => {
                   res.status(200).json({ success: 'new item added to cart', cart });
                 })
                 .catch((err) => {
                   res.status(400).json({ err });
                 });
-            }
           } else {
             // Create a new cart and add the item to it
             const cart = new Cart({
